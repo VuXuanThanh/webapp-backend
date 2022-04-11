@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApp.Core.Entities;
 using WebApp.Core.Interface.Repository;
 using WebApp.Core.Interface.Services;
 using WebApp.Core.Services;
@@ -30,7 +31,20 @@ namespace WebApp.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            ProductRepository._connectionString = Configuration.GetConnectionString("DbConnection");
+            
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Policy",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:8080")
+                                           .AllowAnyHeader()
+                                           .AllowAnyMethod();
+                    });
+            });
+            var connection = Configuration.GetConnectionString("DbConnection");
+            ProductRepository._connectionString = connection;
+            BaseRepository<Category>._connectionString = connection;
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -38,6 +52,12 @@ namespace WebApp.Api
             });
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductService, ProductService>();
+
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICategoryService, CategoryService>();
+
+            services.AddScoped<IProductImageRepository, ProductImageRepository>();
+            services.AddScoped<IProductImageService, ProductImageService>();
 
             services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
@@ -59,6 +79,7 @@ namespace WebApp.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors();
 
             app.UseAuthorization();
 

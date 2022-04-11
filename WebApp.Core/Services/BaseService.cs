@@ -17,10 +17,44 @@ namespace WebApp.Core.Services
             _baseRepository = baseRepository;
         }
 
+        public Task<int> Delete(Guid entityId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<object> Filter(string searchString, int pageSize, int pageIndex)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<T>> GetAll()
+        {
+            var result = await _baseRepository.GetAll();
+            return result;
+        }
+
+        public async Task<T> GetById(string entityId)
+        {
+            var result = await _baseRepository.GetById(entityId);
+            return result;
+
+        }
+
         public int Insert()
         {
             var x = 10000;
             return x;
         }
+
+        public Task<int> Insert(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> Update(Guid entityId, T entity)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

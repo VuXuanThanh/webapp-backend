@@ -17,12 +17,13 @@ namespace WebApp.Core.Entities
         public string Material { get; set; }
         public string Accessory { get; set; }
         public string Weights { get; set; }
-        public string Dismension { get; set; }
+        public string Dimension { get; set; }
         public int Star { get; set; }
         public string Powers { get; set; }
         public string Orgin { get; set; }
         public string BrandId { get; set; }
         public string CategoryId { get; set; }
+        public double PriceDeal { get; set; }
 
 
     }

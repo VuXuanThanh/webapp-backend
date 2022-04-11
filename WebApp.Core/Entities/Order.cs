@@ -14,5 +14,6 @@ namespace WebApp.Core.Entities
         public int Payment { get; set; }
         public double Total { get; set; }
         public string UserId { get; set; }
+        public string DiscountId { get; set; }
     }
 }

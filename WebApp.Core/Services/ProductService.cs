@@ -16,6 +16,17 @@ namespace WebApp.Core.Services
         {
             _productRepository = productRepository;
         }
-       
+
+        public Task<object> Filter(string categoryId, string productName, double priceMin, double priceMax, string brandId, int pageSize=1, int pageIndex=24)
+        {
+            var res = _productRepository.Filter(categoryId, productName, priceMin, priceMax, brandId, pageSize, pageIndex);
+            return res;
+        }
+
+        public Task<object> Filter1(int type, string categoryId, string productName, double priceMin, double priceMax, string brandId, int pageSize, int pageIndex)
+        {
+            var res = _productRepository.Filter1(type, categoryId, productName, priceMin, priceMax, brandId, pageSize, pageIndex);
+            return res;
+        }
     }
 }
