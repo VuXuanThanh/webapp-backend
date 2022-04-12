@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -6,10 +7,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using WebApp.Core.Entities;
 using WebApp.Core.Interface.Repository;
@@ -31,7 +34,36 @@ namespace WebApp.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                o.RequireHttpsMetadata = false;
+                var Key = Encoding.UTF8.GetBytes(Configuration["JWT:Key"]);
+                o.SaveToken = true;
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["JWT:Issuer"],
+                    ValidAudience = Configuration["JWT:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Key),
+                    ClockSkew = TimeSpan.Zero
+                };
+                o.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        context.Token = context.Request.Cookies["Authorization"];
+                        return Task.CompletedTask;
+                    }
+                };
+
+            });
             services.AddCors(options =>
             {
                 options.AddPolicy("Policy",
@@ -45,6 +77,8 @@ namespace WebApp.Api
             var connection = Configuration.GetConnectionString("DbConnection");
             ProductRepository._connectionString = connection;
             BaseRepository<Category>._connectionString = connection;
+            BaseRepository<Users>._connectionString = connection;
+            BaseRepository<ProductImage>._connectionString = connection;
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -58,6 +92,9 @@ namespace WebApp.Api
 
             services.AddScoped<IProductImageRepository, ProductImageRepository>();
             services.AddScoped<IProductImageService, ProductImageService>();
+
+            services.AddScoped<IUsersRepository, UsersRepository>();
+            services.AddScoped<IUsersService, UsersService>();
 
             services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
@@ -79,7 +116,9 @@ namespace WebApp.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCookiePolicy();
             app.UseCors();
+            app.UseAuthentication(); // This need to be added	
 
             app.UseAuthorization();
 

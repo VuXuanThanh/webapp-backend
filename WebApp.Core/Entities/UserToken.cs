@@ -10,8 +10,8 @@ namespace WebApp.Core.Entities
     {
         public string TokenId { get; set; }
         public string Token { get; set; }
-        public DateTime Expries { get; set; }
-        public bool IsExpried { get; set; }
+        public DateTime Expires { get; set; }
+        public bool IsExpired { get; set; }
         public string CreateByIp { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime RevokedDate{ get; set; }
