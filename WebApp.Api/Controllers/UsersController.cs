@@ -36,20 +36,73 @@ namespace WebApp.Api.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login(Users acc, string ipAddress = "10.0.0.1")
+        [EnableCors("Policy")]
+        public IActionResult Login(AuthenticateRequest acc)
         {
-            var res = _usersService.Login(acc, ipAddress);
-            if (res == null)
-                return BadRequest();
-            else
+            try
             {
-                var x = res;
-                setTokenCookie(x.JwtToken, x.RefreshToken);
-                setUserCookie(x.UserId);
-                return Ok(res);
+                var ipAddress = "10.0.0.1";
+                var res = _usersService.Login(acc, ipAddress);
+                if (res == null)
+                {
+                    _responseResult.userMsg = "Thông tin email hoặc mật khẩu không chính xác";
+                    return BadRequest(_responseResult);
+
+                }
+                else
+                {
+                    setTokenCookie(res.JwtToken, res.RefreshToken);
+                    setUserCookie(res.UserId, res.UserName);
+                    var responseAuthen = new
+                    {
+                        UserId = res.UserId,
+                        UserName = res.UserName
+
+                    };
+                    _responseResult.Success = true;
+                    _responseResult.data = responseAuthen;
+                    return Ok(_responseResult);
+                }
+            }
+            catch (Exception ex)
+            {
+                _responseResult.devMsg = ex.Message;
+                _responseResult.userMsg = "Đã có lỗi xảy ra vui lòng thử lại sau";
+                return StatusCode(500, _responseResult);
             }
 
+
         }
+
+
+        [HttpGet("logout")]
+        [EnableCors("Policy")]
+        public IActionResult Logout()
+        {
+            try
+            {
+                var refreshToken = Request.Cookies["refreshToken"];
+                var accountId = Request.Cookies["_userId"];
+                var res = _usersService.Logout(refreshToken, accountId);
+                if (res == 0)
+                    return BadRequest(_responseResult);
+                else
+                {
+                    Response.Cookies.Delete("Authorization");
+                    Response.Cookies.Delete("refreshToken");
+                    return Ok(res);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                _responseResult.devMsg = ex.Message;
+                _responseResult.userMsg = "Đã có lỗi xảy ra vui lòng thử lại sau";
+                return StatusCode(500, _responseResult);
+            }
+        }
+
+
         [HttpGet("user/refresh-token")]
         [EnableCors("Policy")]
         public IActionResult RefreshToken()
@@ -75,7 +128,7 @@ namespace WebApp.Api.Controllers
                 Secure = false,
                 HttpOnly = true,
                 Expires = DateTime.UtcNow.AddMinutes(40),
-                IsEssential = true
+                IsEssential = false
 
             };
             //Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
@@ -84,7 +137,7 @@ namespace WebApp.Api.Controllers
 
         }
 
-        private void setUserCookie(string userId)
+        private void setUserCookie(string userId, string userName)
         {
             var cookieOptions = new CookieOptions
             {
@@ -94,7 +147,11 @@ namespace WebApp.Api.Controllers
                 IsEssential = true
             };
 
-            Response.Cookies.Append("_user", userId, cookieOptions);
+
+            Response.Cookies.Append("_userId", userId, cookieOptions);
+            Response.Cookies.Append("_user", userName, cookieOptions);
+            Response.Cookies.Append("_isLoggedIn", "1", cookieOptions);
+
 
         }
 

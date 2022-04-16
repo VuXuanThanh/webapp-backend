@@ -27,9 +27,13 @@ namespace WebApp.Infrastructure.Repository
             tableName = typeof(T).Name;
         }
 
-        public Task<int> Delete(Guid entityId)
+        public async Task<int> Delete(Guid entityId)
         {
-            throw new NotImplementedException();
+            var sql = $"delete from {tableName} where {tableName}Id = @entityId";
+            var parameter = new DynamicParameters();
+            parameter.Add($"entityId", entityId);
+            var res = await sqlConnection.ExecuteAsync(sql,param: parameter);
+            return res;
         }
 
         public Task<object> Filter(string searchString, int pageSize, int pageIndex)

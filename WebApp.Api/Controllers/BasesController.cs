@@ -59,6 +59,13 @@ namespace WebApp.Api.Controllers
 
         }
 
+        [HttpDelete]
+        public async Task<IActionResult> DeleteById(string entityId)
+        {
+
+            return Ok();
+        }
+
 
         [HttpGet("search")]
         public virtual async Task<IActionResult> Filter(string searchString, int pageSize, int pageIndex)

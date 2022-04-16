@@ -14,6 +14,6 @@ namespace WebApp.Core.Entities
         public string moreInfor { get; set; }
         public string traceId { get; set; }
         public Object data { get; set; }
-        public bool Success { get; set; } = true;
+        public bool Success { get; set; } = false;
     }
 }

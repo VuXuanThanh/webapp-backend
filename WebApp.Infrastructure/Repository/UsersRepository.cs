@@ -89,17 +89,28 @@ namespace WebApp.Infrastructure.Repository
             return (List<Users>)result;
         }
 
-        public Users Login(Users user)
+        public Users Login(AuthenticateRequest user)
         {
             var sql = "select * from Users where Email = @Email and Passwords= @Password";
             var dynamicParameters = new DynamicParameters();
             dynamicParameters.Add("Email", user.Email);
-            dynamicParameters.Add("Password", user.Password);
+            dynamicParameters.Add("Password", user.Passwords);
             var result = sqlConnection.Query<Users>(sql, param: dynamicParameters).ToList();
             if (result.Count() == 0)
                 return null;
             else
                 return (Users)(result[0]);
+        }
+
+        public int Logout(string token, string userId)
+        {
+            var sql = "delete from UserToken where Token =@Token and UserId = @UserId";
+            var dynamicParameters = new DynamicParameters();
+            dynamicParameters.Add("Token", token);
+            dynamicParameters.Add("UserId", userId);
+            var res = sqlConnection.Execute(sql, param: dynamicParameters);
+            return res;
+
         }
 
         public UserToken RefreshToken(string token, string accountId)

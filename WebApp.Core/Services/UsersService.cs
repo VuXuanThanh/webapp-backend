@@ -35,7 +35,7 @@ namespace WebApp.Core.Services
             return res;
         }
 
-        public AuthenticateResponse Login(Users user, string ipAddress)
+        public AuthenticateResponse Login(AuthenticateRequest user, string ipAddress)
         {
             var result = _usersRepository.Login(user);
             if (result == null)
@@ -46,10 +46,16 @@ namespace WebApp.Core.Services
 
             //var handler = new JwtSecurityTokenHandler();
             //var decodedValue = handler.ReadJwtToken(accessToken);
-            AuthenticateResponse authenticateResponse = new AuthenticateResponse(result.UserId, result.Email,
+            AuthenticateResponse authenticateResponse = new AuthenticateResponse(result.UserId, result.UserName,
                 accessToken, refreshToken.Token);
 
             return authenticateResponse;
+        }
+
+        public int Logout(string token, string userId)
+        {
+            var res = _usersRepository.Logout(token, userId);
+            return res;
         }
 
         public Tokens RefreshToken(string token, string accountId)

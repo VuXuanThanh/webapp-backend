@@ -17,9 +17,11 @@ namespace WebApp.Core.Services
             _baseRepository = baseRepository;
         }
 
-        public Task<int> Delete(Guid entityId)
+        public async Task<int> Delete(Guid entityId)
         {
-            throw new NotImplementedException();
+            var res = await _baseRepository.Delete(entityId);
+            return res;
+
         }
 
         public Task<object> Filter(string searchString, int pageSize, int pageIndex)

@@ -71,7 +71,13 @@ namespace WebApp.Api
                     {
                         builder.WithOrigins("http://localhost:8080")
                                            .AllowAnyHeader()
-                                           .AllowAnyMethod();
+                                           .AllowAnyMethod().AllowCredentials();
+                        builder.WithOrigins("https://localhost:8080")
+                                           .AllowAnyHeader()
+                                           .AllowAnyMethod().AllowCredentials();
+                        builder.WithOrigins("https://localhost:8081")
+                                           .AllowAnyHeader()
+                                           .AllowAnyMethod().AllowCredentials(); ;
                     });
             });
             var connection = Configuration.GetConnectionString("DbConnection");

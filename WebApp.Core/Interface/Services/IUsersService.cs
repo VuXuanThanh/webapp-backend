@@ -9,7 +9,7 @@ namespace WebApp.Core.Interface.Services
 {
     public interface IUsersService : IBaseService<Users>
     {
-        AuthenticateResponse Login(Users user, string ipAddress);
+        AuthenticateResponse Login(AuthenticateRequest user, string ipAddress);
         List<Users> GetAlls();
 
         /// <summary>
@@ -25,5 +25,7 @@ namespace WebApp.Core.Interface.Services
         /// <returns></returns>
         UserToken GenerateRefreshToken(string ipAddress);
         Tokens RefreshToken(string token, string accountId);
+
+        int Logout(string token, string userId);
     }
 }

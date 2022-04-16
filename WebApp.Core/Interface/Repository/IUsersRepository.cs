@@ -9,7 +9,7 @@ namespace WebApp.Core.Interface.Repository
 {
     public interface IUsersRepository : IBaseRepository<Users>
     {
-        Users Login(Users user);
+        Users Login(AuthenticateRequest user);
         List<Users> GetAlls();
         string GenerateJSONWebToken(Users user);
 
@@ -17,5 +17,7 @@ namespace WebApp.Core.Interface.Repository
         UserToken RefreshToken(string token, string accountId);
 
         bool checkRefreshToken(string accountId);
+
+        int Logout(string token, string userId);
     }
 }
