@@ -8,7 +8,7 @@ namespace WebApp.Core.Entities
 {
     public class Users
     {
-        public string UserId { get; set; }
+        public string UsersId { get; set; }
         public string UserName { get; set; }
         public string Passwords { get; set; }
         public string Email { get; set; }
@@ -16,5 +16,7 @@ namespace WebApp.Core.Entities
         public string LastName { get; set; }
         public string RoleId { get; set; }
         public bool IsActive{ get; set; }
+
+
     }
 }

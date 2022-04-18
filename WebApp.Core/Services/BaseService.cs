@@ -48,9 +48,10 @@ namespace WebApp.Core.Services
             return x;
         }
 
-        public Task<int> Insert(T entity)
+        public async Task<int> Insert(T entity)
         {
-            throw new NotImplementedException();
+            var res =await _baseRepository.Insert(entity);
+            return res;
         }
 
         public Task<int> Update(Guid entityId, T entity)

@@ -31,14 +31,14 @@ namespace WebApp.Infrastructure.Repository
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[] {
-                new Claim("UserId", user.UserId),
+                new Claim("UserId", user.UsersId),
                
                 };
             var token = new JwtSecurityToken(_configuration["JWT:Issuer"],
                 _configuration["JWT:Audience"],
                 claims,
                 null,
-                expires: DateTime.Now.AddMinutes(5),
+                expires: DateTime.Now.AddHours(3),
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
@@ -53,7 +53,7 @@ namespace WebApp.Infrastructure.Repository
             var refToken = new UserToken
             {
                 Token = Convert.ToBase64String(randomBytes),
-                Expires = DateTime.Now.AddMinutes(10),
+                Expires = DateTime.Now.AddDays(7),
                 CreateDate = DateTime.Now,
                 CreateByIp = ipAddress
             };
@@ -69,7 +69,7 @@ namespace WebApp.Infrastructure.Repository
             dynamicParam.Add("RevokedByIp", null);
             dynamicParam.Add("ReplacedByToken", null);
             dynamicParam.Add("IsActive", true);
-            dynamicParam.Add("UserId", user.UserId);
+            dynamicParam.Add("UserId", user.UsersId);
 
             var res = sqlConnection.Execute(sql, commandType: System.Data.CommandType.StoredProcedure, param: dynamicParam);
             if (res > 0)
@@ -104,7 +104,7 @@ namespace WebApp.Infrastructure.Repository
 
         public int Logout(string token, string userId)
         {
-            var sql = "delete from UserToken where Token =@Token and UserId = @UserId";
+            var sql = "delete from UserToken where Token =@Token and UsersId = @UserId";
             var dynamicParameters = new DynamicParameters();
             dynamicParameters.Add("Token", token);
             dynamicParameters.Add("UserId", userId);
@@ -115,7 +115,7 @@ namespace WebApp.Infrastructure.Repository
 
         public UserToken RefreshToken(string token, string accountId)
         {
-            var sql = "select * from UserToken where UserId= @UserId and Token= @Token";
+            var sql = "select * from UserToken where UsersId= @UserId and Token= @Token";
             var dynamicParam = new DynamicParameters();
             dynamicParam.Add("UserId", accountId);
             dynamicParam.Add("Token", token);

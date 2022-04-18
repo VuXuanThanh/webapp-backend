@@ -120,7 +120,7 @@
   <data name="ErrorCode" xml:space="preserve">
     <value>100</value>
   </data>
-  <data name="ErrorMessage" xml:space="preserve">
-    <value>Co loi xay ra</value>
+  <data name="UserError" xml:space="preserve">
+    <value>Có lỗi xảy ra vui lòng thử lại sau</value>
   </data>
 </root>

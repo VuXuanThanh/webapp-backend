@@ -57,15 +57,30 @@ namespace WebApp.Infrastructure.Repository
             return entity;
         }
 
+
         public int Insert()
         {
             var x = 200000;
             return x;
         }
 
-        public Task<int> Insert(T entity)
+        public async Task<int> Insert(T entity)
         {
-            throw new NotImplementedException();
+            var sqlCommand = $"Proc_Add{tableName}";
+            var parameter = new DynamicParameters();
+            var collections = entity.GetType().GetProperties();
+            parameter.Add($"{tableName}Id", Guid.NewGuid());
+            for (int i = 1; i < collections.Length; i++)
+            {
+
+                var name = collections[i].Name;
+                var value = collections[i].GetValue(entity);
+                parameter.Add($"{name}", value);
+
+            }
+
+            var result = await sqlConnection.ExecuteAsync(sqlCommand, commandType: System.Data.CommandType.StoredProcedure, param: parameter);
+            return result;
         }
 
         public Task<int> Update(Guid entityId, T entity)

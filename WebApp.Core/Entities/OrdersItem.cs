@@ -6,17 +6,11 @@ using System.Threading.Tasks;
 
 namespace WebApp.Core.Entities
 {
-    public class CartItem
+    public class OrdersItem
     {
-        public string UsersId { get; set; }
+        public string OrdersId{ get; set; }
         public string ProductId { get; set; }
-        public double Price{ get; set; }
+        public double Price { get; set; }
         public int Quanlity { get; set; }
-
-
-        [ColumnAttribute("Navigation")]
-        public Product Product { get; set; }
-
-
     }
 }

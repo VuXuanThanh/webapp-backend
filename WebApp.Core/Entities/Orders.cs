@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace WebApp.Core.Entities
 {
-    public class Order
+    public class Orders
     {
-        public string OrderId { get; set; }
+        public string OrdersId { get; set; }
         public int StatusOrder { get; set; }
         public DateTime CreateDate { get; set; }
         public int Payment { get; set; }

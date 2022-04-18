@@ -46,7 +46,7 @@ namespace WebApp.Core.Services
 
             //var handler = new JwtSecurityTokenHandler();
             //var decodedValue = handler.ReadJwtToken(accessToken);
-            AuthenticateResponse authenticateResponse = new AuthenticateResponse(result.UserId, result.UserName,
+            AuthenticateResponse authenticateResponse = new AuthenticateResponse(result.UsersId, result.UserName,
                 accessToken, refreshToken.Token);
 
             return authenticateResponse;
@@ -65,7 +65,7 @@ namespace WebApp.Core.Services
             if (isExpried > 0)
             {
                 var acc = new Users();
-                acc.UserId = accountId;
+                acc.UsersId = accountId;
                 var accessToken = _usersRepository.GenerateJSONWebToken(acc);
                 var newToken = new Tokens();
                 newToken.Token = accessToken;

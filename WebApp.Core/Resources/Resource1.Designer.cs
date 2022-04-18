@@ -70,11 +70,11 @@ namespace WebApp.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Co loi xay ra.
+        ///   Looks up a localized string similar to Có lỗi xảy ra vui lòng thử lại sau.
         /// </summary>
-        internal static string ErrorMessage {
+        internal static string UserError {
             get {
-                return ResourceManager.GetString("ErrorMessage", resourceCulture);
+                return ResourceManager.GetString("UserError", resourceCulture);
             }
         }
     }

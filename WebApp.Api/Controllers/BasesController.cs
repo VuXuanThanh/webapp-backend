@@ -59,8 +59,41 @@ namespace WebApp.Api.Controllers
 
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteById(string entityId)
+        [HttpPost]
+        [EnableCors("Policy")]
+        public async Task<IActionResult> Post(T entity)
+        {
+            try
+            {
+                var res = await _baseService.Insert(entity);
+                if(res>0)
+                {
+                    _responseResult.Success = true;
+                    _responseResult.data = res;
+                   
+                }
+                return Ok(_responseResult);
+
+            }
+            catch (Exception ex)
+            {
+                _responseResult.devMsg = ex.Message;
+                _responseResult.Success = false;
+                return StatusCode(500, _responseResult);
+            }
+        }
+
+        [HttpDelete("{entityId}")]
+        public async Task<IActionResult> Delete(string entityId)
+        {
+
+            return Ok();
+        }
+
+
+        [HttpPut("{entityId}")]
+        [EnableCors("Policy")]
+        public async Task<IActionResult> Delete(string entityId, T entity)
         {
 
             return Ok();

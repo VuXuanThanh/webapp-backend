@@ -127,13 +127,20 @@ namespace WebApp.Api.Controllers
             {
                 Secure = false,
                 HttpOnly = true,
-                Expires = DateTime.UtcNow.AddMinutes(40),
+                Expires = DateTime.UtcNow.AddHours(3),
                 IsEssential = false
 
             };
             //Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
             Response.Cookies.Append("Authorization", accessToken, cookieOptions);
-            Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+            Response.Cookies.Append("refreshToken", refreshToken, new CookieOptions
+            {
+                Secure = false,
+                HttpOnly = true,
+                Expires = DateTime.UtcNow.AddDays(3),
+                IsEssential = false
+
+            });
 
         }
 
@@ -143,15 +150,12 @@ namespace WebApp.Api.Controllers
             {
                 Secure = false,
                 HttpOnly = false,
-                Expires = DateTime.UtcNow.AddMinutes(40),
+                Expires = DateTime.Now.AddDays(7),
                 IsEssential = true
             };
 
-
             Response.Cookies.Append("_userId", userId, cookieOptions);
             Response.Cookies.Append("_user", userName, cookieOptions);
-            Response.Cookies.Append("_isLoggedIn", "1", cookieOptions);
-
 
         }
 

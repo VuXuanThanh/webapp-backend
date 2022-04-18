@@ -8,7 +8,7 @@ namespace WebApp.Core.Entities
 {
     public class UserToken
     {
-        public string TokenId { get; set; }
+        public string UserTokenId { get; set; }
         public string Token { get; set; }
         public DateTime Expires { get; set; }
         public bool IsExpired { get; set; }
@@ -18,6 +18,6 @@ namespace WebApp.Core.Entities
         public string RevokedByIp { get; set; }
         public string ReplacedByToken { get; set; }
         public bool IsActive{ get; set; }
-        public string UserId { get; set; }
+        public string UsersId { get; set; }
     }
 }
