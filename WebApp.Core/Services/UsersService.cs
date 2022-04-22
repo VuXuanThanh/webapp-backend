@@ -47,7 +47,7 @@ namespace WebApp.Core.Services
             //var handler = new JwtSecurityTokenHandler();
             //var decodedValue = handler.ReadJwtToken(accessToken);
             AuthenticateResponse authenticateResponse = new AuthenticateResponse(result.UsersId, result.UserName,
-                accessToken, refreshToken.Token);
+                accessToken.Token, refreshToken.Token, accessToken.Expires);
 
             return authenticateResponse;
         }
@@ -68,7 +68,7 @@ namespace WebApp.Core.Services
                 acc.UsersId = accountId;
                 var accessToken = _usersRepository.GenerateJSONWebToken(acc);
                 var newToken = new Tokens();
-                newToken.Token = accessToken;
+                newToken.Token = accessToken.Token;
                 newToken.RefreshToken = token;
                 return newToken;
             }
@@ -76,6 +76,11 @@ namespace WebApp.Core.Services
             {
                 return null;
             }
+        }
+
+        Tokens IUsersService.GenerateJSONWebToken(Users user)
+        {
+            throw new NotImplementedException();
         }
     }
 }

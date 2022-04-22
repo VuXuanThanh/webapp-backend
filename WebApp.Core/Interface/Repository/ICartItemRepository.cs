@@ -13,6 +13,11 @@ namespace WebApp.Core.Interface.Repository
 
         Task<int> GetAllRecord(string userId);
 
-        Task<List<CartItem>> GetCartItemsByUserId(string userId);
+        Task<List<CartItem>> GetCartItemsByUserId(string userId, bool order);
+
+        Task<int> Update(List<ProductItem> list);
+
+      
     }
+
 }

@@ -52,7 +52,7 @@ namespace WebApp.Api.Controllers
                 else
                 {
                     setTokenCookie(res.JwtToken, res.RefreshToken);
-                    setUserCookie(res.UserId, res.UserName);
+                    setUserCookie(res.UserId, res.UserName, res.Expires);
                     var responseAuthen = new
                     {
                         UserId = res.UserId,
@@ -103,12 +103,12 @@ namespace WebApp.Api.Controllers
         }
 
 
-        [HttpGet("user/refresh-token")]
+        [HttpGet("refresh-token")]
         [EnableCors("Policy")]
         public IActionResult RefreshToken()
         {
             var refreshToken = Request.Cookies["refreshToken"];
-            var accountId = Request.Cookies["_user"];
+            var accountId = Request.Cookies["_userId"];
             var res = _usersService.RefreshToken(refreshToken, accountId);
             if (res == null)
             {
@@ -144,7 +144,7 @@ namespace WebApp.Api.Controllers
 
         }
 
-        private void setUserCookie(string userId, string userName)
+        private void setUserCookie(string userId, string userName, DateTime tokenExpries)
         {
             var cookieOptions = new CookieOptions
             {
@@ -156,6 +156,7 @@ namespace WebApp.Api.Controllers
 
             Response.Cookies.Append("_userId", userId, cookieOptions);
             Response.Cookies.Append("_user", userName, cookieOptions);
+            Response.Cookies.Append("_tokenExpries", tokenExpries.ToString(), cookieOptions);
 
         }
 

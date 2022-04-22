@@ -6,19 +6,13 @@ using System.Threading.Tasks;
 
 namespace WebApp.Core.Entities
 {
-    public class CartItem
+    public class ProductItem
     {
-        public string UsersId { get; set; }
+        public string UserId { get; set; }
         public string ProductId { get; set; }
-        public double Price{ get; set; }
         public int Quanlity { get; set; }
 
-        public bool StatusItem { get; set; } = false;
-
-
-        [ColumnAttribute("Navigation")]
-        public Product Product { get; set; }
-
+        public bool StatusItem { get; set; }
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -102,14 +103,14 @@ namespace WebApp.Api.Controllers
                 return StatusCode(500, _responseResult);
             }
         }
-
+        [Authorize]
         [HttpGet("{userId}")]
         [EnableCors("Policy")]
-        public async Task<IActionResult> GetByUserId(string userId)
+        public async Task<IActionResult> GetByUserId(string userId, bool order)
         {
             try
             {
-                var res = await _cartItemService.GetCartItemsByUserId(userId);
+                var res = await _cartItemService.GetCartItemsByUserId(userId, order);
                 return Ok(res);
 
             }
@@ -122,5 +123,65 @@ namespace WebApp.Api.Controllers
             }
         }
 
+
+        [HttpPut]
+        [EnableCors("Policy")]
+        public async Task<IActionResult> Put(List<ProductItem> cartItems)
+        {
+            try
+            {
+                var res = await _cartItemService.Update(cartItems);
+                if (res > 0)
+                    return StatusCode(201);
+                else
+                    return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _responseResult.userMsg = "Đã có lỗi xảy ra vui lòng thử lại sau";
+                _responseResult.devMsg = ex.Message;
+                _responseResult.Success = false;
+                return StatusCode(500, _responseResult);
+            }
+        }
+
+
+        [HttpPatch]
+        [EnableCors("Policy")]
+        public async Task<IActionResult> DeleteMultiple(List<ProductItem> productItems)
+        {
+            try
+            {
+                var res = await _cartItemService.DeleteMultiple(productItems);
+                if (res > 0)
+                    return Ok();
+                else
+                    return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _responseResult.userMsg = "Đã có lỗi xảy ra vui lòng thử lại sau";
+                _responseResult.devMsg = ex.Message;
+                _responseResult.Success = false;
+                return StatusCode(500, _responseResult);
+            }
+        }
+
+        //[HttpGet("{userId}/items-selected")]
+        //public async Task<IActionResult> GetItemSelectedForOrder(string userId)
+        //{
+        //    try
+        //    {
+        //        var res = await _cartItemService.GetCartItemsByUserId(userId, true);
+        //        return Ok(res);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _responseResult.userMsg = "Đã có lỗi xảy ra vui lòng thử lại sau";
+        //        _responseResult.devMsg = ex.Message;
+        //        _responseResult.Success = false;
+        //        return StatusCode(500, _responseResult);
+        //    }
+        //}
     }
 }

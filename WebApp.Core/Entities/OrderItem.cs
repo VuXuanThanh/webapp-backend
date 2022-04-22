@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebApp.Core.Entities
 {
-    public class OrdersItem
+    public class OrderItem
     {
         public string OrdersId{ get; set; }
         public string ProductId { get; set; }

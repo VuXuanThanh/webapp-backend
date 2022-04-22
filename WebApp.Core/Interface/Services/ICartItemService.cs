@@ -11,6 +11,11 @@ namespace WebApp.Core.Interface.Services
     {
         Task<int> Delete(string userId, string productId);
         Task<int> GetAllRecord(string userId);
-        Task<List<CartItem>> GetCartItemsByUserId(string userId);
+        Task<List<CartItem>> GetCartItemsByUserId(string userId, bool order);
+
+
+        Task<int> Update(List<ProductItem> list);
+
+        Task<int> DeleteMultiple(List<ProductItem> list);
     }
 }

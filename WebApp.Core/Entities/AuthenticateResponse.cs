@@ -15,12 +15,16 @@ namespace WebApp.Core.Entities
 
         public string RefreshToken { get; set; }
 
-        public AuthenticateResponse(string userId, string userName, string jwtToken, string refreshToken)
+        public DateTime Expires { get; set; }
+
+        public AuthenticateResponse(string userId, string userName, 
+            string jwtToken, string refreshToken, DateTime expries)
         {
             UserId = userId;
             UserName = userName;
             JwtToken = jwtToken;
             RefreshToken = refreshToken;
+            Expires = expries;
         }
     }
 }

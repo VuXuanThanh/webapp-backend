@@ -87,11 +87,14 @@ namespace WebApp.Infrastructure.Repository
             return entity;
         }
 
-        public async Task<List<CartItem>> GetCartItemsByUserId(string userId)
+        public async Task<List<CartItem>> GetCartItemsByUserId(string userId, bool order)
         {
-            var sql = "select Price, Quanlity, c.ProductId, p.ProductName from CartItem c" +
+            
+            var sql = (order==false)? "select Price, Quanlity, c.ProductId, p.ProductName from CartItem c" +
                 " inner join Product p on c.ProductId = p.ProductId " +
-                "where c.UsersId = @UserId";
+                "where c.UsersId = @UserId" : "select Price, Quanlity, c.ProductId, p.ProductName from CartItem c" +
+                " inner join Product p on c.ProductId = p.ProductId " +
+                "where c.UsersId = @UserId and StatusItem = 1";
             var parameter = new DynamicParameters();
             parameter.Add("UserId", userId);
             var entity = await sqlConnection.QueryAsync<CartItem, Product, CartItem>(sql,(cartItem, product)=> {
@@ -102,5 +105,25 @@ namespace WebApp.Infrastructure.Repository
             ,  param: parameter);
             return (List<CartItem>)entity;
         }
+
+        public async Task<int> Update(List<ProductItem> list)
+        {
+            var count = 0;
+            foreach (var item in list)
+            {
+                var sql = "update CartItem set Quanlity = @quanlity, StatusItem = @status " +
+                    "where UsersId = @userId and ProductId = @productId";
+                var parameter = new DynamicParameters();
+                parameter.Add("userId", item.UserId);
+                parameter.Add("status", item.StatusItem);
+                parameter.Add("quanlity", item.Quanlity);
+                parameter.Add("productId", item.ProductId);
+                var res = await sqlConnection.ExecuteAsync(sql, param: parameter);
+                count += res;
+            }
+            return count;
+        }
+
+       
     }
 }

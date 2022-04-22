@@ -11,7 +11,7 @@ namespace WebApp.Core.Interface.Repository
     {
         Users Login(AuthenticateRequest user);
         List<Users> GetAlls();
-        string GenerateJSONWebToken(Users user);
+        Tokens GenerateJSONWebToken(Users user);
 
         UserToken GenerateRefreshToken(Users user, string ipAddress);
         UserToken RefreshToken(string token, string accountId);

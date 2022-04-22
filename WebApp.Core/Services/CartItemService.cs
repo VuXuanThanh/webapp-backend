@@ -25,15 +25,33 @@ namespace WebApp.Core.Services
 
         }
 
+
+        public async Task<int> DeleteMultiple(List<ProductItem> list)
+        {
+            var count = 0;
+            foreach (var item in list)
+            {
+                var res = await _cartItemRepository.Delete(item.UserId, item.ProductId);
+                count += res;
+            }
+            return count;
+        }
+
         public async Task<int> GetAllRecord(string userId)
         {
             var res = await _cartItemRepository.GetAllRecord(userId);
             return res;
         }
 
-        public async Task<List<CartItem>> GetCartItemsByUserId(string userId)
+        public async Task<List<CartItem>> GetCartItemsByUserId(string userId, bool order)
         {
-            var res = await _cartItemRepository.GetCartItemsByUserId(userId);
+            var res = await _cartItemRepository.GetCartItemsByUserId(userId, order);
+            return res;
+        }
+
+        public async Task<int> Update(List<ProductItem> list)
+        {
+            var res = await _cartItemRepository.Update(list);
             return res;
         }
     }

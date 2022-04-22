@@ -17,7 +17,7 @@ namespace WebApp.Core.Interface.Services
         /// </summary>
         /// <param name="acc"></param>
         /// <returns></returns>
-        string GenerateJSONWebToken(Users user);
+        Tokens GenerateJSONWebToken(Users user);
         /// <summary>
         /// Get refresh token 
         /// </summary>

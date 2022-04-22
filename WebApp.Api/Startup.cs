@@ -86,6 +86,8 @@ namespace WebApp.Api
             BaseRepository<Users>._connectionString = connection;
             BaseRepository<ProductImage>._connectionString = connection;
             BaseRepository<CartItem>._connectionString = connection;
+            BaseRepository<Orders>._connectionString = connection;
+            BaseRepository<OrderItem>._connectionString = connection;
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -105,6 +107,12 @@ namespace WebApp.Api
 
             services.AddScoped<ICartItemRepository, CartItemRepository>();
             services.AddScoped<ICartItemService, CartItemService>();
+
+            services.AddScoped<IOrdersRepository, OrdersRepository>();
+            services.AddScoped<IOrdersService, OrdersService>();
+
+            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+            services.AddScoped<IOrderItemService, OrderItemService>();
 
             services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));

@@ -25,23 +25,28 @@ namespace WebApp.Infrastructure.Repository
             throw new NotImplementedException();
         }
 
-        public string GenerateJSONWebToken(Users user)
+        public Tokens GenerateJSONWebToken(Users user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[] {
                 new Claim("UserId", user.UsersId),
-               
+
                 };
+            var expires = DateTime.Now.AddHours(3);
             var token = new JwtSecurityToken(_configuration["JWT:Issuer"],
                 _configuration["JWT:Audience"],
                 claims,
                 null,
-                expires: DateTime.Now.AddHours(3),
+                expires: expires,
                 signingCredentials: credentials);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var result = new Tokens();
+            result.Token = new JwtSecurityTokenHandler().WriteToken(token);
+            result.Expires = expires;
+
+            return result;
         }
 
         public UserToken GenerateRefreshToken(Users user, string ipAddress)

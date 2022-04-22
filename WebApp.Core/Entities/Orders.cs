@@ -10,10 +10,14 @@ namespace WebApp.Core.Entities
     {
         public string OrdersId { get; set; }
         public int StatusOrder { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } 
         public int Payment { get; set; }
         public double Total { get; set; }
         public string UserId { get; set; }
-        public string DiscountId { get; set; }
+        public string DiscountId { get; set; } = null;
+
+        public string ReceivingAddress { get; set; }
+
+        public string Note { get; set; }
     }
 }
