@@ -17,6 +17,7 @@ namespace WebApp.Infrastructure.Repository
         {
         }
 
+        
         public async Task<object> Filter(string categoryId, string productName, double priceMin, double priceMax, string brandId, int pageSize=24, int pageIndex=1)
         {
             var sqlCmd = $"Proc_Filter{tableName}";

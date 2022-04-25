@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace WebApp.Core.Entities
 {
     [AttributeUsage(AttributeTargets.Property)]
+    //[AttributeUsage(AttributeTargets.Method)]
     public class ColumnAttribute : Attribute
     {
         public string ColumnType { get; set; } = null;

@@ -32,6 +32,7 @@ namespace WebApp.Infrastructure.Repository
 
             var claims = new[] {
                 new Claim("UserId", user.UsersId),
+                new Claim("RoleId", user.RoleId)
 
                 };
             var expires = DateTime.Now.AddHours(3);
@@ -96,7 +97,8 @@ namespace WebApp.Infrastructure.Repository
 
         public Users Login(AuthenticateRequest user)
         {
-            var sql = "select * from Users where Email = @Email and Passwords= @Password";
+            var sql = "select UsersId, UserName, UserRole.RoleId, RoleName from Users inner join UserRole on Users.RoleId = UserRole.RoleId" +
+                " where Email = @Email and Passwords= @Password";
             var dynamicParameters = new DynamicParameters();
             dynamicParameters.Add("Email", user.Email);
             dynamicParameters.Add("Password", user.Passwords);

@@ -17,6 +17,9 @@ namespace WebApp.Core.Entities
         public string RoleId { get; set; }
         public bool IsActive{ get; set; }
 
+        [ColumnAttribute("Navigation")]
+        public string RoleName { get; set; }
+
 
     }
 }

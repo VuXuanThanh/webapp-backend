@@ -47,7 +47,7 @@ namespace WebApp.Core.Services
             //var handler = new JwtSecurityTokenHandler();
             //var decodedValue = handler.ReadJwtToken(accessToken);
             AuthenticateResponse authenticateResponse = new AuthenticateResponse(result.UsersId, result.UserName,
-                accessToken.Token, refreshToken.Token, accessToken.Expires);
+                accessToken.Token, refreshToken.Token, accessToken.Expires, result.RoleName);
 
             return authenticateResponse;
         }

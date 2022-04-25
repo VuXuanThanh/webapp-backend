@@ -34,14 +34,14 @@ namespace WebApp.Core.Interface.Services
         /// <param name="entityId"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task<int> Update(Guid entityId, T entity);
+        Task<int> Update(T entity);
 
         /// <summary>
         /// Delete by Id
         /// </summary>
         /// <param name="entityId"></param>
         /// <returns></returns>
-        Task<int> Delete(Guid entityId);
+        Task<int> Delete(string entityId);
 
         /// <summary>
         /// filter by options

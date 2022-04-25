@@ -58,7 +58,7 @@ namespace WebApp.Api
                 {
                     OnMessageReceived = context =>
                     {
-                        context.Token = context.Request.Cookies["Authorization"];
+                        context.Token = context.Request.Cookies["token"];
                         return Task.CompletedTask;
                     }
                 };
@@ -77,7 +77,11 @@ namespace WebApp.Api
                                            .AllowAnyMethod().AllowCredentials();
                         builder.WithOrigins("https://localhost:8081")
                                            .AllowAnyHeader()
-                                           .AllowAnyMethod().AllowCredentials(); ;
+                                           .AllowAnyMethod().AllowCredentials(); 
+                        builder.WithOrigins("https://localhost:8080/admin")
+                                          .AllowAnyHeader()
+                                          .AllowAnyMethod().AllowCredentials();
+                        ;
                     });
             });
             var connection = Configuration.GetConnectionString("DbConnection");
@@ -88,6 +92,7 @@ namespace WebApp.Api
             BaseRepository<CartItem>._connectionString = connection;
             BaseRepository<Orders>._connectionString = connection;
             BaseRepository<OrderItem>._connectionString = connection;
+            BaseRepository<Brand>._connectionString = connection;
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -113,6 +118,9 @@ namespace WebApp.Api
 
             services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             services.AddScoped<IOrderItemService, OrderItemService>();
+
+            services.AddScoped<IBrandRepository, BrandRepository>();
+            services.AddScoped<IBrandService, BrandService>();
 
             services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));

@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using WebApp.Core.Entities;
 using WebApp.Core.Interface.Repository;
 
 namespace WebApp.Infrastructure.Repository
@@ -27,7 +29,7 @@ namespace WebApp.Infrastructure.Repository
             tableName = typeof(T).Name;
         }
 
-        public async Task<int> Delete(Guid entityId)
+        public async Task<int> Delete(string entityId)
         {
             var sql = $"delete from {tableName} where {tableName}Id = @entityId";
             var parameter = new DynamicParameters();
@@ -58,12 +60,6 @@ namespace WebApp.Infrastructure.Repository
         }
 
 
-        public int Insert()
-        {
-            var x = 200000;
-            return x;
-        }
-
         public async Task<int> Insert(T entity)
         {
             var sqlCommand = $"Proc_Add{tableName}";
@@ -72,7 +68,11 @@ namespace WebApp.Infrastructure.Repository
             parameter.Add($"{tableName}Id", Guid.NewGuid());
             for (int i = 1; i < collections.Length; i++)
             {
-
+                var classAttrData = ((ColumnAttribute)(collections[i].GetCustomAttribute(typeof(ColumnAttribute), false)));
+                if (classAttrData != null)
+                {
+                    continue;
+                }
                 var name = collections[i].Name;
                 var value = collections[i].GetValue(entity);
                 parameter.Add($"{name}", value);
@@ -83,9 +83,27 @@ namespace WebApp.Infrastructure.Repository
             return result;
         }
 
-        public Task<int> Update(Guid entityId, T entity)
+        public async Task<int> Update(T entity)
         {
-            throw new NotImplementedException();
+            var sqlCommand = $"Proc_Update{tableName}";
+            var parameter = new DynamicParameters();
+            var collections = entity.GetType().GetProperties();
+            //parameter.Add($"{tableName}Id",entityId);
+            for (int i = 0; i < collections.Length; i++)
+            {
+                var classAttrData = ((ColumnAttribute)(collections[i].GetCustomAttribute(typeof(ColumnAttribute), false)));
+                if (classAttrData != null)
+                {
+                    continue;
+                }
+                var name = collections[i].Name;
+                var value = collections[i].GetValue(entity);
+                parameter.Add($"{name}", value);
+
+            }
+
+            var result = await sqlConnection.ExecuteAsync(sqlCommand, commandType: System.Data.CommandType.StoredProcedure, param: parameter);
+            return result;
         }
 
      

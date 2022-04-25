@@ -34,14 +34,14 @@ namespace WebApp.Core.Interface.Repository
         /// <param name="entityId"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task<int> Update(Guid entityId, T entity);
+        Task<int> Update(T entity);
 
         /// <summary>
         /// Delete by Id
         /// </summary>
         /// <param name="entityId"></param>
         /// <returns></returns>
-        public Task<int> Delete(Guid entityId);
+        Task<int> Delete(string entityId);
         /// <summary>
         /// filter by options
         /// </summary>
@@ -49,7 +49,11 @@ namespace WebApp.Core.Interface.Repository
         /// <param name="pageSize"></param>
         /// <param name="pageIndex"></param>
         /// <returns></returns>
-        public Task<Object> Filter(string searchString, int pageSize, int pageIndex);
+        Task<Object> Filter(string searchString, int pageSize, int pageIndex);
+
+        
+
+         
 
     }
 }

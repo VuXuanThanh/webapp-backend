@@ -13,7 +13,7 @@ namespace WebApp.Core.Entities
         public string Summary { get; set; }
         public string Descriptions { get; set; }
         public double PriceOrgin { get; set; }
-        public bool StatusProduct { get; set; }
+        public bool StatusProduct { get; set; } = true;
         public string Material { get; set; }
         public string Accessory { get; set; }
         public string Weights { get; set; }
@@ -24,6 +24,12 @@ namespace WebApp.Core.Entities
         public string BrandId { get; set; }
         public string CategoryId { get; set; }
         public double PriceDeal { get; set; }
+
+        [ColumnAttribute("Navigation")]
+        public string BrandName { get; set; }
+
+        [ColumnAttribute("Navigation")]
+        public string CategoryName { get; set; }
 
 
     }

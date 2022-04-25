@@ -52,7 +52,7 @@ namespace WebApp.Api.Controllers
                 else
                 {
                     setTokenCookie(res.JwtToken, res.RefreshToken);
-                    setUserCookie(res.UserId, res.UserName, res.Expires);
+                    setUserCookie(res.UserId, res.UserName, res.Expires,res.RoleName);
                     var responseAuthen = new
                     {
                         UserId = res.UserId,
@@ -88,8 +88,9 @@ namespace WebApp.Api.Controllers
                     return BadRequest(_responseResult);
                 else
                 {
-                    Response.Cookies.Delete("Authorization");
+                    Response.Cookies.Delete("token");
                     Response.Cookies.Delete("refreshToken");
+                    Response.Cookies.Delete("_userId");
                     return Ok(res);
 
                 }
@@ -132,7 +133,7 @@ namespace WebApp.Api.Controllers
 
             };
             //Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
-            Response.Cookies.Append("Authorization", accessToken, cookieOptions);
+            Response.Cookies.Append("token", accessToken, cookieOptions);
             Response.Cookies.Append("refreshToken", refreshToken, new CookieOptions
             {
                 Secure = false,
@@ -144,7 +145,7 @@ namespace WebApp.Api.Controllers
 
         }
 
-        private void setUserCookie(string userId, string userName, DateTime tokenExpries)
+        private void setUserCookie(string userId, string userName, DateTime tokenExpries, string role)
         {
             var cookieOptions = new CookieOptions
             {
@@ -157,7 +158,7 @@ namespace WebApp.Api.Controllers
             Response.Cookies.Append("_userId", userId, cookieOptions);
             Response.Cookies.Append("_user", userName, cookieOptions);
             Response.Cookies.Append("_tokenExpries", tokenExpries.ToString(), cookieOptions);
-
+            Response.Cookies.Append("_role", role, cookieOptions);
         }
 
 

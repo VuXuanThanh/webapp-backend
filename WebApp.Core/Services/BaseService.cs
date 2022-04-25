@@ -17,7 +17,7 @@ namespace WebApp.Core.Services
             _baseRepository = baseRepository;
         }
 
-        public async Task<int> Delete(Guid entityId)
+        public async Task<int> Delete(string entityId)
         {
             var res = await _baseRepository.Delete(entityId);
             return res;
@@ -54,9 +54,10 @@ namespace WebApp.Core.Services
             return res;
         }
 
-        public Task<int> Update(Guid entityId, T entity)
+        public async Task<int> Update(T entity)
         {
-            throw new NotImplementedException();
+            var res = await _baseRepository.Update(entity);
+            return res;
         }
 
     }

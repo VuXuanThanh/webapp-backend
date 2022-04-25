@@ -17,14 +17,17 @@ namespace WebApp.Core.Entities
 
         public DateTime Expires { get; set; }
 
+        public string RoleName { get; set; }
+
         public AuthenticateResponse(string userId, string userName, 
-            string jwtToken, string refreshToken, DateTime expries)
+            string jwtToken, string refreshToken, DateTime expries, string role)
         {
             UserId = userId;
             UserName = userName;
             JwtToken = jwtToken;
             RefreshToken = refreshToken;
             Expires = expries;
+            RoleName = role;
         }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApp.Core.Entities;
@@ -110,6 +111,9 @@ namespace WebApp.Api.Controllers
         {
             try
             {
+                var token = Request.Cookies["Authorization"];
+                var handler = new JwtSecurityTokenHandler();
+                var decodedValue = handler.ReadJwtToken(token);
                 var res = await _cartItemService.GetCartItemsByUserId(userId, order);
                 return Ok(res);
 
