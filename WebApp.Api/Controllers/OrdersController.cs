@@ -65,5 +65,67 @@ namespace WebApp.Api.Controllers
             }
         }
 
+        [HttpGet]
+        [EnableCors("Policy")]
+        public async Task<IActionResult> Get()
+        {
+            try
+            {
+                var res = await _ordersRepository.Filter();
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+
+                _responseResult.userMsg = "Đã có lỗi xảy ra vui lòng thử lại sau";
+                _responseResult.devMsg = ex.Message;
+                _responseResult.Success = false;
+                return StatusCode(500, _responseResult);
+            }
+        }
+
+        [HttpPut]
+        [EnableCors("Policy")]
+        public async Task<IActionResult> Put(Orders order)
+        {
+            try
+            {
+                var res = await _ordersRepository.Update(order);
+                if (res > 0)
+                    return Ok(res);
+                else
+                    return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _responseResult.userMsg = "Đã có lỗi xảy ra vui lòng thử lại sau";
+                _responseResult.devMsg = ex.Message;
+                _responseResult.Success = false;
+                return StatusCode(500, _responseResult);
+            }
+        }
+
+        //[HttpDelete("{orderId}")]
+        //[EnableCors("Policy")]
+        //public async Task<IActionResult> Delete(string orderId)
+        //{
+        //    try
+        //    {
+        //        var res = await _ordersRepository.Delete(orderId);
+        //        if (res > 0)
+        //            return Ok(res);
+        //        else
+        //            return NoContent();
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _responseResult.userMsg = "Đã có lỗi xảy ra vui lòng thử lại sau";
+        //        _responseResult.devMsg = ex.Message;
+        //        _responseResult.Success = false;
+        //        return StatusCode(500, _responseResult);
+        //    }
+        //}
+
     }
 }

@@ -111,7 +111,7 @@ namespace WebApp.Api.Controllers
         {
             try
             {
-                var token = Request.Cookies["Authorization"];
+                var token = Request.Cookies["token"];
                 var handler = new JwtSecurityTokenHandler();
                 var decodedValue = handler.ReadJwtToken(token);
                 var res = await _cartItemService.GetCartItemsByUserId(userId, order);

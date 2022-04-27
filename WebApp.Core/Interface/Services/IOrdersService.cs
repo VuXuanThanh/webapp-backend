@@ -9,6 +9,6 @@ namespace WebApp.Core.Interface.Services
 {
     public interface IOrdersService : IBaseService<Orders>
     {
-
+        
     }
 }

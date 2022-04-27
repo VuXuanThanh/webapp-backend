@@ -10,5 +10,7 @@ namespace WebApp.Core.Interface.Repository
     public interface IOrdersRepository : IBaseRepository<Orders>
     {
        new Task<OrderResponse> Insert(Orders order);
+
+        Task<Object> Filter();
     }
 }

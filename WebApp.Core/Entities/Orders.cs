@@ -13,7 +13,7 @@ namespace WebApp.Core.Entities
         public DateTime CreateDate { get; set; } 
         public int Payment { get; set; }
         public double Total { get; set; }
-        public string UserId { get; set; }
+        public string UsersId { get; set; }
         public string DiscountId { get; set; } = null;
 
         public string ReceivingAddress { get; set; }
