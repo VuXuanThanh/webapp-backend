@@ -122,6 +122,51 @@ namespace WebApp.Api.Controllers
             }
         }
 
+        [HttpGet("roles")]
+        [EnableCors("Policy")]
+        [Authorize]
+        public IActionResult GetRoles()
+        {
+            try
+            {
+                var res = _usersRepository.GetUserRoles();
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                _responseResult.devMsg = ex.Message;
+                _responseResult.userMsg = "Đã có lỗi xảy ra vui lòng thử lại sau";
+                return StatusCode(500, _responseResult);
+            }
+        }
+
+        [HttpGet("userId/roles/{value}")]
+        [EnableCors("Policy")]
+        [Authorize]
+        public IActionResult CheckRoleUserId(int value)
+        {
+            try
+            {
+                var userId = Request.Cookies["_userId"];
+                var res = _usersRepository.CheckUserPolicyRole(userId);
+                if (res.Permission >= value)
+                    return Ok();
+                else
+                {
+                    Response.Cookies.Delete("_userId");
+                    return Unauthorized();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _responseResult.devMsg = ex.Message;
+                _responseResult.userMsg = "Đã có lỗi xảy ra vui lòng thử lại sau";
+                return StatusCode(500, _responseResult);
+            }
+        }
+
+
         private void setTokenCookie(string accessToken, string refreshToken)
         {
             var cookieOptions = new CookieOptions

@@ -10,5 +10,7 @@ namespace WebApp.Core.Entities
     {
         public string Email { get; set; }
         public string Passwords { get; set; }
+
+        public int IsManage { get; set; }
     }
 }

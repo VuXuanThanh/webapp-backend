@@ -20,6 +20,26 @@ namespace WebApp.Infrastructure.Repository
         {
         }
 
+        public UserRole CheckUserPolicyRole(string userId)
+        {
+            var sql = $"select UserRole.RoleId, RoleName, Permission from Users inner join UserRole on Users.RoleId = UserRole.RoleId" +
+                " where UsersId = @userId";
+            var parameter = new DynamicParameters();
+            parameter.Add($"userId", userId);
+            var entity = sqlConnection.QueryFirst<UserRole>(sql, param: parameter);
+            return entity;
+        }
+
+        public new async Task<Users> GetById(string entityId)
+        {
+            var sql = $"select UsersId, UserName, Permission from Users inner join UserRole on Users.RoleId = UserRole.RoleId" +
+                " where UsersId = @userId";
+            var parameter = new DynamicParameters();
+            parameter.Add($"userId", entityId);
+            var entity = await sqlConnection.QueryFirstOrDefaultAsync<Users>(sql, param: parameter);
+            return entity;
+        }
+
         public bool checkRefreshToken(string accountId)
         {
             throw new NotImplementedException();
@@ -95,9 +115,16 @@ namespace WebApp.Infrastructure.Repository
             return (List<Users>)result;
         }
 
+        public List<UserRole> GetUserRoles()
+        {
+            string sql = "select * from UserRole";
+            var result = sqlConnection.Query<UserRole>(sql);
+            return (List<UserRole>)result;
+        }
+
         public Users Login(AuthenticateRequest user)
         {
-            var sql = "select UsersId, UserName, UserRole.RoleId, RoleName from Users inner join UserRole on Users.RoleId = UserRole.RoleId" +
+            var sql = "select UsersId, UserName, UserRole.RoleId, RoleName, Permission from Users inner join UserRole on Users.RoleId = UserRole.RoleId" +
                 " where Email = @Email and Passwords= @Password";
             var dynamicParameters = new DynamicParameters();
             dynamicParameters.Add("Email", user.Email);
@@ -106,7 +133,11 @@ namespace WebApp.Infrastructure.Repository
             if (result.Count() == 0)
                 return null;
             else
+            {
+                if (user.IsManage > 0 && result[0].Permission < 1)
+                    return null;
                 return (Users)(result[0]);
+            }
         }
 
         public int Logout(string token, string userId)
@@ -129,5 +160,7 @@ namespace WebApp.Infrastructure.Repository
             var res = sqlConnection.Query<UserToken>(sql, param: dynamicParam).ToList();
             return (UserToken)(res[0]);
         }
+
+       
     }
 }

@@ -45,6 +45,7 @@ namespace WebApp.Api.Controllers
 
         [HttpGet("{entityId}")]
         [EnableCors("Policy")]
+        [Authorize]
         public async Task<IActionResult> GetById(string entityId)
         {
             try
@@ -65,7 +66,6 @@ namespace WebApp.Api.Controllers
         [HttpPost]
         [EnableCors("Policy")]
         [Authorize]
-
         public async Task<IActionResult> Post(T entity)
         {
             try
@@ -147,7 +147,7 @@ namespace WebApp.Api.Controllers
 
         private bool CheckPolicyAuthorization(string key)
         {
-            var role = (key!=null) ? Request.Cookies["_role"].ToString(): null;
+            var role = (key!=null) ? Request.Cookies["_role"]: null;
             return (role == key) ? true : false;
 
         }

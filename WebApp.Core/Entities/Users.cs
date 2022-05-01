@@ -20,6 +20,9 @@ namespace WebApp.Core.Entities
         [ColumnAttribute("Navigation")]
         public string RoleName { get; set; }
 
+        [ColumnAttribute("Navigation")]
+        public int Permission { get; set; }
+
 
     }
 }

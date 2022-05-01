@@ -19,5 +19,9 @@ namespace WebApp.Core.Interface.Repository
         bool checkRefreshToken(string accountId);
 
         int Logout(string token, string userId);
+
+        List<UserRole> GetUserRoles();
+
+        UserRole CheckUserPolicyRole(string userId);
     }
 }
